@@ -159,3 +159,160 @@ The averages increased and moved closer to their median values.
 * Entries with `score = 0` represented missing rating information rather than poor ratings.
 * Mean values can be affected by missing or extreme values, making median an important metric for comparison.
 * Data cleaning can significantly change analytical conclusions and should be performed before drawing final insights.
+
+
+
+# Day 4 - Feature Investigation and Correlation Analysis
+
+## Objective
+
+Investigate which factors appear to be related to anime scores and identify potentially useful features for future machine learning models.
+
+---
+
+## Data Cleaning
+
+Before analysis, anime entries with a score of `0` were removed.
+
+Reason:
+
+* A score of `0` often corresponded to `scored_by = 0`
+* This indicated missing ratings rather than extremely low ratings
+* Keeping these entries would distort averages and correlations
+
+```python
+df_clean = df[df["score"] > 0]
+```
+
+---
+
+## Correlation with Anime Score
+
+| Feature   | Correlation with Score |
+| --------- | ---------------------- |
+| Members   | 0.380                  |
+| Scored By | 0.345                  |
+| Favorites | 0.206                  |
+| Episodes  | 0.092                  |
+
+### Findings
+
+* Member count showed the strongest relationship with score.
+* Favorites had a weaker relationship than expected.
+* Episode count showed almost no relationship with score.
+* Popularity appears to matter more than episode length.
+
+---
+
+## Members vs Score
+
+Correlation: **0.380**
+
+### Observation
+
+* Anime with low member counts had scores across the entire range.
+* Highly popular anime were rarely poorly rated.
+* Popularity does not guarantee a high score, but highly popular anime tend to avoid very low scores.
+
+---
+
+## Favorites vs Score
+
+Correlation: **0.206**
+
+### Observation
+
+* A positive relationship exists, but it is relatively weak.
+* Being heavily favorited does not automatically result in a high score.
+* Favorites may capture emotional attachment rather than overall rating quality.
+
+---
+
+## Episodes vs Score
+
+Correlation: **0.092**
+
+### Observation
+
+* Episode count showed almost no relationship with score.
+* Both short and long anime can receive high or low ratings.
+* Anime length alone is not a useful predictor of score.
+
+---
+
+## Type Analysis
+
+Average scores by anime type:
+
+| Type    | Average Score |
+| ------- | ------------- |
+| TV      | 6.777         |
+| Special | 6.364         |
+| OVA     | 6.252         |
+| Movie   | 6.227         |
+| ONA     | 5.557         |
+| Music   | 5.177         |
+
+### Findings
+
+* TV anime achieved the highest average score.
+* Music anime had the lowest average score.
+* TV series appear to perform better overall than other release formats.
+
+---
+
+## Source Material Analysis
+
+Average scores by source material:
+
+Top sources:
+
+| Source       | Average Score |
+| ------------ | ------------- |
+| Light Novel  | 7.210         |
+| Manga        | 6.975         |
+| Novel        | 6.843         |
+| 4-koma Manga | 6.798         |
+
+Lower-scoring sources:
+
+| Source | Average Score |
+| ------ | ------------- |
+| Music  | 5.251         |
+| Radio  | 5.489         |
+| Other  | 5.750         |
+
+### Findings
+
+* Source material appears to influence scores more strongly than anime type.
+* Adaptations from Light Novels, Manga, and Novels generally performed better.
+* Music and Radio-based projects tended to receive lower scores.
+
+---
+
+## Correlation Matrix Analysis
+
+Strongest correlations:
+
+| Variables             | Correlation |
+| --------------------- | ----------- |
+| Members ↔ Scored By   | 0.987       |
+| Favorites ↔ Scored By | 0.792       |
+| Members ↔ Favorites   | 0.777       |
+
+### Findings
+
+* Members and Scored By are almost identical measures of popularity.
+* Anime with larger audiences naturally receive more ratings.
+* Members, Favorites, and Scored By form a "popularity cluster" of features.
+* Episode count showed almost no relationship with any major variable.
+
+---
+
+## Conclusion
+
+The strongest indicators related to anime scores were popularity-based features such as Members and Scored By.
+
+Episode count contributed very little information and showed weak relationships with both score and popularity.
+
+For future machine learning experiments, Members, Favorites, Scored By, Type, and Source appear to be promising features, while Episode Count may provide limited predictive value.
