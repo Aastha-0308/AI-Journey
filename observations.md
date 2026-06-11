@@ -316,3 +316,191 @@ The strongest indicators related to anime scores were popularity-based features 
 Episode count contributed very little information and showed weak relationships with both score and popularity.
 
 For future machine learning experiments, Members, Favorites, Scored By, Type, and Source appear to be promising features, while Episode Count may provide limited predictive value.
+
+
+
+# Day 5 - Introduction to Machine Learning
+
+## Objective
+
+Build a first machine learning model and understand how a computer learns patterns from data.
+
+---
+
+## Features and Target
+
+Machine learning requires:
+
+- Features (inputs)
+- Target (output to predict)
+
+For this project:
+
+Features:
+- members
+- favorites
+- scored_by
+- episodes
+
+Target:
+- score
+
+---
+
+## Train-Test Split
+
+The dataset was divided into:
+
+- 80% Training Data
+- 20% Testing Data
+
+Purpose:
+
+- Train the model on one portion of the data
+- Evaluate performance on unseen data
+
+This helps measure how well the model generalizes.
+
+---
+
+## First Linear Regression Model
+
+Feature Used:
+
+- members
+
+Result:
+
+R² Score = 0.137
+
+### Finding
+
+Member count alone explains only a small portion of anime score variation.
+
+Popularity has some relationship with score but is not enough to accurately predict ratings.
+
+---
+
+## Multiple Feature Model
+
+Features Used:
+
+- members
+- favorites
+- scored_by
+
+Result:
+
+R² Score = 0.189
+
+### Finding
+
+Adding more popularity-related features improved performance.
+
+However, the improvement was limited because these features are highly correlated with one another and contain similar information.
+
+---
+
+## Episode Count Experiment
+
+Features Used:
+
+- members
+- episodes
+
+Result:
+
+R² Score = 0.140
+
+### Finding
+
+Adding episode count produced almost no improvement.
+
+This supports previous EDA findings that episode count has very little relationship with anime score.
+
+---
+
+## All Numeric Features Model
+
+Features Used:
+
+- members
+- favorites
+- scored_by
+- episodes
+
+Result:
+
+R² Score = 0.193
+
+### Finding
+
+Using all available numeric features produced only a small improvement.
+
+Current features do not contain enough information to accurately predict anime scores.
+
+---
+
+## Coefficient Analysis
+
+Linear Regression learns an equation:
+
+score =
+intercept +
+(feature × coefficient)
+
+Observations:
+
+- Members generally contributed positively.
+- Episode count contributed very little.
+- Some popularity features received negative coefficients.
+
+Reason:
+
+Strong correlations between members, favorites, and scored_by caused multicollinearity.
+
+The model struggled to determine which feature deserved credit.
+
+---
+
+## Error Analysis
+
+The largest prediction errors occurred for extremely low-rated anime.
+
+Examples:
+
+Actual Score ≈ 1.0
+Predicted Score ≈ 6.1
+
+### Finding
+
+When the model lacks useful information, it tends to predict values near the overall average score.
+
+---
+
+## Feature Engineering Experiment
+
+Created:
+
+favorite_ratio = favorites / members
+
+Purpose:
+
+Measure how many viewers considered an anime a favorite.
+
+### Finding
+
+Feature engineering can create more meaningful information than simply adding additional columns.
+
+However, scaling and model limitations still affected performance.
+
+---
+
+## Key Lessons
+
+1. Correlation does not guarantee strong prediction.
+2. More features do not always improve a model.
+3. Similar features can confuse a model (multicollinearity).
+4. Linear Regression predicts using a straight-line relationship.
+5. Model evaluation is as important as model training.
+6. Understanding model failures provides valuable insight into the data.
